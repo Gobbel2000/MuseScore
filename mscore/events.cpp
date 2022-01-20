@@ -149,12 +149,16 @@ void ScoreView::wheelEvent(QWheelEvent* event)
       int dx = 0, dy = 0, n = 0;
       qreal nReal = 0.0;
 
+// pixelDelta is unreliable on X11
+#ifndef Q_OS_LINUX
       if (!pixelsScrolled.isNull()) {
             dx = pixelsScrolled.x();
             dy = pixelsScrolled.y();
             nReal = static_cast<qreal>(dy) / PIXELSSTEPSFACTOR;
             }
-      else if (!stepsScrolled.isNull()) {
+      else
+#endif
+      if (!stepsScrolled.isNull()) {
             dx = static_cast<qreal>(stepsScrolled.x()) * qMax(2, width() / 10) / 120;
             dy = static_cast<qreal>(stepsScrolled.y()) * qMax(2, height() / 10) / 120;
             nReal = static_cast<qreal>(stepsScrolled.y()) / 120;
